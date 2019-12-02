@@ -68,6 +68,9 @@ public:
   double GetMinDistance(string city1,string city2);
   bool isGraphConnected();
 
+  //Helper Functions
+  void DFS(Node *s);
+  void Dijkstra();
   
 private:
   map<string,Node*>* graph;

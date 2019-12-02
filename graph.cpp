@@ -103,23 +103,26 @@ double Graph::GetMinDistance(string city1,string city2){
 //start with this function, not since DFS not done
 bool Graph::isGraphConnected(){
 
-  
-  DFS(graph->begin());
-
   map<string,Node* >::iterator it;
   for (it=graph->begin(); it != graph->end();it++) {
 
     Node* n = (*it).second;
-    vector<string>* neigh  = n->neighbors(); 
-    vector<string>::iterator itn;
+    n->setVisited(false);
+  }
 
-    for(itn=neigh->begin();itn!=neigh->end();itn++) {
-     
-      if(!it->isVisited()){
+  map<string,Node* >::iterator it1;
+  Node* s = (*it1).second;
+
+  DFS(s);
+
+  map<string,Node* >::iterator it_1;
+  for (it_1=graph->begin(); it_1 != graph->end();it_1++) {
+
+    Node* n = (*it_1).second;
+    if(n->isVisited()){
 
         return false;
       }
-    }
   }
 
   return true;
@@ -131,45 +134,36 @@ bool Graph::isGraphConnected(){
 //helper functions - need to define & stuff
 
 //use in graphConnected
-void Graph::DFS(Node s){
+void Graph::DFS(Node *s){
 
-  stack<Node s> dfs_Stack;
+  stack<Node*> dfs_Stack;
 
   dfs_Stack.push_back(s);
 
   while(!dfs_Stack.empty()){
 
-    Node current = dfs_Stack.top();
+    Node* current = dfs_Stack.top();
     dfs_Stack.pop();
 
-    if(current.isVisited()){
+    if(!current->isVisited()){
 
-      current.setVisited(true);
-      vector<Edge*>* adjacentsList = n->neighbors(); 
+      current->setVisited(true);
 
+      vector<string>* neigh  = n->neighbors(); 
+      vector<string>::iterator itn;
 
+      for(itn=neigh->begin();itn!=neigh->end();itn++) {
+        
+        dfs_Stack.push_back(itn);
+      }
     }
-  }
-
-  
-
+  } 
 }
 
 //use in Getmindistance
 void Graph::Dijkstra(){
 
-}
 
-//come up with function to create a adjacency vector
-
-void Graph::CreateNodeTable(){
-
-  map<string,Node* >::iterator it;
-  for (it=graph->begin(); it != graph->end();it++) {
-
-    
-
-  }
 }
 
 

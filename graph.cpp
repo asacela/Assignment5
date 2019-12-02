@@ -63,23 +63,18 @@ bool Graph::IsThereTripletClique(){
   //if undirected, count nodes in row
   if(!directed){
 
-    int element_count = 0;
     map<string,Node* >::iterator it;
     for (it=graph->begin(); it != graph->end();it++) {
 
       Node* n = (*it).second;
-      vector<string>* neigh  = n->neighbors(); 
-      vector<string>::iterator itn;
+      vector<Edge* >* adj = n->adjacentsList();
+      vector<Edge*>::iterator it;
+      for(it=adj->begin();it!=adj->end();it++) {
 
-      for(itn=neigh->begin();itn!=neigh->end();itn++) {
-       
-        element_count += 1;
+
       }
 
-      if(element_count == 3){
 
-        return true;
-      }
     }
   }
   else if(directed){

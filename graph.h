@@ -19,9 +19,8 @@ public:
   void   setVisited(bool v)        {visited = v;};
   bool    isVisited()              {return visited;};
   void   addEdge(Edge* e)    {
-    
-    adjacents->push_back(e);
-  };
+
+    adjacents->push_back(e);};
   int    degree()  const           {return adjacents->size();};
   string getPayload() const        {return payload;}
   vector<string>*  neighbors();

@@ -94,7 +94,7 @@ bool Graph::IsThereTripletClique(){
 //do this one last
 double Graph::GetMinDistance(string city1,string city2){
 
-
+  Dijkstra();
 
   return 2.0;
 }
@@ -122,23 +122,21 @@ bool Graph::isGraphConnected(){
     if(n->isVisited()){
 
         return false;
-      }
+    }
   }
 
   return true;
 }
 
 
-
-
-//helper functions - need to define & stuff
+//helper functions
 
 //use in graphConnected
 void Graph::DFS(Node *s){
 
   stack<Node*> dfs_Stack;
 
-  dfs_Stack.push_back(s);
+  dfs_Stack.push(s);
 
   while(!dfs_Stack.empty()){
 
@@ -148,13 +146,11 @@ void Graph::DFS(Node *s){
     if(!current->isVisited()){
 
       current->setVisited(true);
+      vector<Edge* >* adj = current->adjacentsList();
+      vector<Edge*>::iterator it;
+      for(it=adj->begin();it!=adj->end();it++) {
 
-      vector<string>* neigh  = n->neighbors(); 
-      vector<string>::iterator itn;
-
-      for(itn=neigh->begin();itn!=neigh->end();itn++) {
-        
-        dfs_Stack.push_back(itn);
+        dfs_Stack.push((*it)->getNode());
       }
     }
   } 

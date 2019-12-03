@@ -1,6 +1,5 @@
 #include "graph.h"
 #include <stack>
-#include <algorithm>
 
 
  vector<string>* Node::neighbors() {
@@ -44,11 +43,11 @@ void Graph::printGraph() {
   map<string,Node* >::iterator it;
   for (it=graph->begin(); it != graph->end();it++) {
 
-    Node* n = it->second;
+    Node* n = (*it).second;
     cout << n->getPayload() << "[";
-    
+
     //Iterate the neighboors
-    vector<string>* neigh  = n->neighbors(); 
+    vector<string>* neigh  = n->neighbors();
     vector<string>::iterator itn;
     for(itn=neigh->begin();itn!=neigh->end();itn++) {
        cout << (*itn) << " ";
@@ -67,32 +66,22 @@ bool Graph::IsThereTripletClique(){
     map<string,Node* >::iterator it;
     for (it=graph->begin(); it != graph->end();it++) {
 
-      Node* n = it->second;
+      Node* n = (*it).second;
       vector<Edge* >* adj = n->adjacentsList();
       vector<Edge*>::iterator it;
       for(it=adj->begin();it!=adj->end();it++) {
 
-        vector<Edge* >* adj2 = it->adjacentsList();
-        vector<Edge*>::iterator it2 = find(adj2.begin(), adj2.end(), );
-
-
-        if((it+1)!=graph->end){
-
-
-        }
-        else if(){
-
-        }
-
 
       }
+
+
     }
   }
   else if(directed){
 
     //if directed is needed, implement here
   }
-  
+
 
   return false;
 }
@@ -112,20 +101,20 @@ bool Graph::isGraphConnected(){
   map<string,Node* >::iterator it;
   for (it=graph->begin(); it != graph->end();it++) {
 
-    Node* n = it->second;
+    Node* n = (*it).second;
     n->setVisited(false);
   }
 
-  map<string,Node* >::iterator it1 = graph->begin();
-  Node* s = it1->second;
+  map<string,Node* >::iterator it1;
+  Node* s = (*it1).second;
 
   DFS(s);
 
   map<string,Node* >::iterator it_1;
   for (it_1=graph->begin(); it_1 != graph->end();it_1++) {
 
-    Node* n = it_1->second;
-    if(!n->isVisited()){
+    Node* n = (*it_1).second;
+    if(n->isVisited()){
 
         return false;
     }
@@ -159,12 +148,16 @@ void Graph::DFS(Node *s){
         dfs_Stack.push((*it)->getNode());
       }
     }
-  } 
+  }
 }
 
 //use in Getmindistance
-void Graph::Dijkstra(){
+void Graph::Dijkstra(Node* startV){
+  map<string,Node*>::iterator it;
 
+  for(it = graph->begin(); it != graph->end();++it){
+    (*it)->setVisited(false);
+  }
 
 }
 
@@ -172,7 +165,7 @@ void Graph::Dijkstra(){
 int main() {
   cout << "Graph Example 2.0\n";
   Graph g(false);
-  
+
   g.addNode("a");
   g.addNode("b");
   g.addNode("c");
@@ -185,5 +178,3 @@ int main() {
   g.printGraph();
 
 }
-
-

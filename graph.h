@@ -12,7 +12,7 @@ class Edge;
 //Node
 class Node {
 public:
- Node(const string& elem):payload(elem),visited(false){ 
+ Node(const string& elem):payload(elem),visited(false){
     adjacents = new vector<Edge* >();
   };
   ~Node() {};
@@ -57,21 +57,21 @@ public:
   ~Graph() {
     delete graph;
    };
-  
+
   //DO NOT CHANGE THE FOLLOWING METHODS
   void addNode(string node);
   void addEdge(string nid1 , string nid2, double w);
   void printGraph();
 
-  //Homework 
+  //Homework
   bool IsThereTripletClique();
   double GetMinDistance(string city1,string city2);
   bool isGraphConnected();
 
   //Helper Functions
   void DFS(Node *s);
-  void Dijkstra();
-  
+  void Dijkstra(Node*);
+
 private:
   map<string,Node*>* graph;
   bool directed;

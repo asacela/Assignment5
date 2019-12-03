@@ -57,43 +57,37 @@ void Graph::printGraph() {
   }
 }
 
-//This is wrong
 //TODO: redo & check neighbors of vertex to see if they are connected
 bool Graph::IsThereTripletClique(){
 
   //if undirected, count nodes in row
   if(!directed){
 
-    map<string,Node* >::iterator it;
-    for (it=graph->begin(); it != graph->end();it++) {
+    map<string,Node* >::iterator iter_map;
+    for (iter_map=graph->begin(); iter_map != graph->end();iter_map++) {
 
-      Node* n = it->second;
+      Node* n = iter_map->second;
       vector<Edge* >* adj = n->adjacentsList();
-      vector<Edge*>::iterator it;
-      for(it=adj->begin();it!=adj->end();it++) {
 
-        vector<Edge* >* adj2 = it->adjacentsList();
-        vector<Edge*>::iterator it2 = find(adj2.begin(), adj2.end(), );
+      for(vector<Edge*>::iterator it1=adj->begin();it1!=adj->end();it1++) {
 
-
-        if((it+1)!=graph->end){
-
-
+        vector<Edge*>::iterator it2;
+        vector<Edge*>::iterator temp = it1 + 1;
+        
+        if((it1+1)!=adj->end()){
         }
-        else if(){
+        else{
 
+          vector<Edge* >* adj2 = (*temp)->getNode()->adjacentsList();
+          it2 = find(adj2->begin(), adj2->end(), (*it1));
         }
-
-
+        if(*it2 == *it1){ 
+          
+          return true;
+        }
       }
     }
   }
-  else if(directed){
-
-    //if directed is needed, implement here
-  }
-  
-
   return false;
 }
 
@@ -109,24 +103,40 @@ double Graph::GetMinDistance(string city1,string city2){
 //start with this function, not since DFS not done
 bool Graph::isGraphConnected(){
 
+  cout << "Before DFS:" << endl;
+
+  //iterate map to set all to false
   map<string,Node* >::iterator it;
   for (it=graph->begin(); it != graph->end();it++) {
 
     Node* n = it->second;
     n->setVisited(false);
+    cout << n->getPayload();
+    if(!n->isVisited()){
+      cout << " - not visited" << endl;
+        
+    }
+   
   }
 
+  //set source as first in map
   map<string,Node* >::iterator it1 = graph->begin();
   Node* s = it1->second;
 
+  //DFS
   DFS(s);
 
+  cout << "After DFS:" << endl;
+
+  //Check to see if any visited any node is false
   map<string,Node* >::iterator it_1;
   for (it_1=graph->begin(); it_1 != graph->end();it_1++) {
 
     Node* n = it_1->second;
+    cout << n->getPayload() << endl;
     if(!n->isVisited()){
 
+        cout << " - not visited" << endl;
         return false;
     }
   }
@@ -176,6 +186,7 @@ int main() {
   g.addNode("a");
   g.addNode("b");
   g.addNode("c");
+  g.addNode("d");
 
   g.addEdge("a","b",10);
   g.addEdge("b","c",5);
@@ -183,6 +194,17 @@ int main() {
 
 
   g.printGraph();
+
+  cout << "Graph is Connected: " << endl;
+  if(g.isGraphConnected()){
+
+    cout << "True" << endl;
+  }
+  else{
+
+    cout << "False" << endl;
+  }
+
 
 }
 

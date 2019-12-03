@@ -245,34 +245,36 @@ string Graph::getRandString(){
 void Graph::generateTestGraph(){
 
   map<string,Node* >::iterator it;
-
-  //finish 500 one
+  vector <string> myStringVec;
 
   for(int i = 0; i < 100; ++i){
     string randString = getRandString();
     addNode(randString);
-
+    myStringVec.push_back(randString);
   }
 
   for(int i = 0; i < 500; ++i){
       it = graph->begin();
+      int randIndex = rand() % myStringVec.size();
       advance(it, rand() % 100);
-      addEdge(it->first, getRandString(), 1);
-
+      addEdge(it->first, myStringVec.at(randIndex), 1);
+      //cout << it->first << " into " << myStringVec.at(randIndex) << endl;
   }
 
   for(int i = 0; i < 500; ++i){
       it = graph->begin();
+      int randIndex = rand() % myStringVec.size();
       advance(it, rand() % 100);
-      addEdge(it->first, getRandString(), 2);
-
+      addEdge(it->first, myStringVec.at(randIndex), 2);
+      //cout << it->first << " into " << myStringVec.at(randIndex) << endl;
   }
 
   for(int i = 0; i < 500; ++i){
       it = graph->begin();
+      int randIndex = rand() % myStringVec.size();
       advance(it, rand() % 100);
-      addEdge(it->first, getRandString(), 3);
-
+      addEdge(it->first, myStringVec.at(randIndex), 3);
+      //cout << it->first << " into " << myStringVec.at(randIndex) << endl;
   }
 
 }
@@ -372,6 +374,6 @@ int main() {
   elapsedTime = (End - Start)/CLOCKS_PER_MS; // converts elapsed time from microseconds to milliseconds.
   cout << "isTripletClique Elapsed Time: " << elapsedTime << endl;
 
-
+  //g2.printGraph();
 
 }

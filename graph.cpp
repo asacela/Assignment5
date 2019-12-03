@@ -110,7 +110,7 @@ bool Graph::IsThereTripletClique(){
 //do this one last
 double Graph::GetMinDistance(string city1,string city2){
 
-  Dijkstra();
+  //Dijkstra goes here
 
   return 2.0;
 }
@@ -225,7 +225,7 @@ void Graph::Dijkstra(Node* startV){
   map<string,Node*>::iterator it;
 
   for(it = graph->begin(); it != graph->end();++it){
-    (*it)->setVisited(false);
+    //(*it)->setVisited(false); //commented out because gives compilation errors
   }
 
 

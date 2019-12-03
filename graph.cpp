@@ -1,6 +1,5 @@
 #include "graph.h"
 #include <stack>
-#include <algorithm>
 
 const int NUMBERS_SIZE = 50000;
 const int CLOCKS_PER_MS = CLOCKS_PER_SEC/1000; //clock per milliseconds
@@ -48,11 +47,11 @@ void Graph::printGraph() {
   map<string,Node* >::iterator it;
   for (it=graph->begin(); it != graph->end();it++) {
 
-    Node* n = it->second;
+    Node* n = (*it).second;
     cout << n->getPayload() << "[";
-    
+
     //Iterate the neighboors
-    vector<string>* neigh  = n->neighbors(); 
+    vector<string>* neigh  = n->neighbors();
     vector<string>::iterator itn;
     for(itn=neigh->begin();itn!=neigh->end();itn++) {
        cout << (*itn) << " ";
@@ -94,6 +93,7 @@ bool Graph::IsThereTripletClique(){
         }
         else{
 
+
           vector<Edge* >* adj2 = (*temp)->getNode()->adjacentsList();
           it2 = find(adj2->begin(), adj2->end(), (*it1));
         }
@@ -125,7 +125,7 @@ bool Graph::isGraphConnected(){
   map<string,Node* >::iterator it;
   for (it=graph->begin(); it != graph->end();it++) {
 
-    Node* n = it->second;
+    Node* n = (*it).second;
     n->setVisited(false);
     //cout << n->getPayload();
     if(!n->isVisited()){
@@ -193,7 +193,6 @@ int Graph::LongestSimplePath(){
   return 1;
 }
 
-//Helper functions
 
 //use in graphConnected
 void Graph::DFS(Node *s){
@@ -218,11 +217,16 @@ void Graph::DFS(Node *s){
         }
       }
     }
-  } 
+  }
 }
 
 //use in Getmindistance
-void Graph::Dijkstra(){
+void Graph::Dijkstra(Node* startV){
+  map<string,Node*>::iterator it;
+
+  for(it = graph->begin(); it != graph->end();++it){
+    (*it)->setVisited(false);
+  }
 
 
 }
@@ -282,7 +286,7 @@ int main() {
   **********************/
   cout << "Graph Example 2.0\n";
   Graph g(false);
-  
+
   g.addNode("a");
   g.addNode("b");
   g.addNode("c");
@@ -371,5 +375,3 @@ int main() {
 
 
 }
-
-

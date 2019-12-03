@@ -72,9 +72,21 @@ bool Graph::IsThereTripletClique(){
       for(vector<Edge*>::iterator it1=adj->begin();it1!=adj->end();it1++) {
 
         vector<Edge*>::iterator it2;
-        vector<Edge*>::iterator temp = it1 + 1;
+        vector<Edge*>::iterator temp;
+        if(it1 != adj->end()){
+          temp = it1 + 1;
+        }
+
+        cout << "Checking these nodes: ";
+        cout << (*it1)->getNode()->getPayload();
+        if(temp != adj->end()){
+          cout << (*temp)->getNode()->getPayload();
+        }
+        cout << endl;
         
-        if((it1+1)!=adj->end()){
+        
+        
+        if(temp==adj->end()){
         }
         else{
 
@@ -145,7 +157,7 @@ bool Graph::isGraphConnected(){
 }
 
 
-//helper functions
+//Helper functions
 
 //use in graphConnected
 void Graph::DFS(Node *s){
@@ -186,7 +198,7 @@ int main() {
   g.addNode("a");
   g.addNode("b");
   g.addNode("c");
-  g.addNode("d");
+  //g.addNode("d");
 
   g.addEdge("a","b",10);
   g.addEdge("b","c",5);
@@ -204,6 +216,18 @@ int main() {
 
     cout << "False" << endl;
   }
+  cout << endl;
+
+  cout << "Triplet Clique: " << endl;
+  if(g.IsThereTripletClique()){
+
+    cout << "True" << endl;
+  }
+  else{
+
+    cout << "False" << endl;
+  }
+  cout << endl;
 
 
 }

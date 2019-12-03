@@ -2,6 +2,10 @@
 #include <stack>
 #include <algorithm>
 
+const int NUMBERS_SIZE = 50000;
+const int CLOCKS_PER_MS = CLOCKS_PER_SEC/1000; //clock per milliseconds
+const string ALPHA_CHARS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
 
  vector<string>* Node::neighbors() {
    vector<string>* vec = new vector<string>();
@@ -77,12 +81,12 @@ bool Graph::IsThereTripletClique(){
           temp = it1 + 1;
         }
 
-        cout << "Checking these nodes: ";
-        cout << (*it1)->getNode()->getPayload();
+        //cout << "Checking these nodes: ";
+        //cout << (*it1)->getNode()->getPayload();
         if(temp != adj->end()){
-          cout << (*temp)->getNode()->getPayload();
+          //cout << (*temp)->getNode()->getPayload();
         }
-        cout << endl;
+        //cout << endl;
         
         
         
@@ -112,10 +116,10 @@ double Graph::GetMinDistance(string city1,string city2){
 }
 
 
-//start with this function, not since DFS not done
+//start with this function, not since DFS not done - Complexity O(n + m)
 bool Graph::isGraphConnected(){
 
-  cout << "Before DFS:" << endl;
+  //cout << "Before DFS:" << endl;
 
   //iterate map to set all to false
   map<string,Node* >::iterator it;
@@ -123,9 +127,9 @@ bool Graph::isGraphConnected(){
 
     Node* n = it->second;
     n->setVisited(false);
-    cout << n->getPayload();
+    //cout << n->getPayload();
     if(!n->isVisited()){
-      cout << " - not visited" << endl;
+      //cout << " - not visited" << endl;
         
     }
    
@@ -138,17 +142,17 @@ bool Graph::isGraphConnected(){
   //DFS
   DFS(s);
 
-  cout << "After DFS:" << endl;
+  //cout << "After DFS:" << endl;
 
   //Check to see if any visited any node is false
   map<string,Node* >::iterator it_1;
   for (it_1=graph->begin(); it_1 != graph->end();it_1++) {
 
     Node* n = it_1->second;
-    cout << n->getPayload() << endl;
+    //cout << n->getPayload() << endl;
     if(!n->isVisited()){
 
-        cout << " - not visited" << endl;
+        //cout << " - not visited" << endl;
         return false;
     }
   }
@@ -156,6 +160,38 @@ bool Graph::isGraphConnected(){
   return true;
 }
 
+int Graph::LongestSimplePath(){
+  /*
+  //Source Node
+  map<string,Node* >::iterator iter_map = graph->begin();
+  Node* s = iter_map->second;
+
+  int current_len = 0;
+
+
+  stack<Node*> dfs_Stack;
+
+  dfs_Stack.push(s);
+
+  while(!dfs_Stack.empty()){
+
+    Node* current = dfs_Stack.top();
+    dfs_Stack.pop();
+
+    if(!current->isVisited()){
+
+      current->setVisited(true);
+      vector<Edge* >* adj = current->adjacentsList();
+      vector<Edge*>::iterator it;
+      for(it=adj->begin();it!=adj->end();it++) {
+        if(!((*it)->getNode()->isVisited())){
+          dfs_Stack.push((*it)->getNode());
+        }
+      }
+    }
+  } */
+  return 1;
+}
 
 //Helper functions
 
@@ -177,8 +213,9 @@ void Graph::DFS(Node *s){
       vector<Edge* >* adj = current->adjacentsList();
       vector<Edge*>::iterator it;
       for(it=adj->begin();it!=adj->end();it++) {
-
-        dfs_Stack.push((*it)->getNode());
+        if(!((*it)->getNode()->isVisited())){ 
+          dfs_Stack.push((*it)->getNode());
+        }
       }
     }
   } 
@@ -190,8 +227,59 @@ void Graph::Dijkstra(){
 
 }
 
+string Graph::getRandString(){
+  
+  string randomString = "";
+  for(int i = 0; i < 10; ++i){
+
+    randomString += ALPHA_CHARS[rand() % ALPHA_CHARS.length()];
+  }
+  return randomString;
+}
+
+//make a better test function
+void Graph::generateTestGraph(){
+
+  map<string,Node* >::iterator it;
+
+  //finish 500 one
+
+  for(int i = 0; i < 100; ++i){
+    string randString = getRandString();
+    addNode(randString);
+
+  }
+
+  for(int i = 0; i < 500; ++i){
+      it = graph->begin();
+      advance(it, rand() % 100);
+      addEdge(it->first, getRandString(), 1);
+
+  }
+
+  for(int i = 0; i < 500; ++i){
+      it = graph->begin();
+      advance(it, rand() % 100);
+      addEdge(it->first, getRandString(), 2);
+
+  }
+
+  for(int i = 0; i < 500; ++i){
+      it = graph->begin();
+      advance(it, rand() % 100);
+      addEdge(it->first, getRandString(), 3);
+
+  }
+
+}
+
+
+
 
 int main() {
+  /*********************
+    Given Test Harness
+  **********************/
   cout << "Graph Example 2.0\n";
   Graph g(false);
   
@@ -206,7 +294,10 @@ int main() {
 
 
   g.printGraph();
+  cout << endl << endl;
 
+
+  //isGraphConnected
   cout << "Graph is Connected: " << endl;
   if(g.isGraphConnected()){
 
@@ -216,8 +307,9 @@ int main() {
 
     cout << "False" << endl;
   }
-  cout << endl;
+  cout << endl << endl;
 
+  //isTripletClique
   cout << "Triplet Clique: " << endl;
   if(g.IsThereTripletClique()){
 
@@ -227,7 +319,55 @@ int main() {
 
     cout << "False" << endl;
   }
-  cout << endl;
+  cout << endl << endl;
+
+  /*********************
+    Custom Test Harness
+  **********************/
+  cout << "Testing Graph:" << endl;
+  Graph g2(false);
+  int elapsedTime;
+
+  g2.generateTestGraph();
+
+  //isGraphConnected
+  clock_t Start = clock();
+
+  bool isConnected = g2.isGraphConnected();
+
+  cout << "GraphConnected: " << endl;
+  if(isConnected){
+
+    cout << "True" << endl;
+  }
+  else{
+
+    cout << "False" << endl;
+  }
+
+  clock_t End = clock();
+  elapsedTime = (End - Start)/CLOCKS_PER_MS; // converts elapsed time from microseconds to milliseconds.
+  cout << "isGraphConnected Elapsed Time: " << elapsedTime << endl;
+
+  //isTripletClique
+  Start = clock();
+
+  bool triplet = g2.IsThereTripletClique();
+
+  cout << "Triplet Clique: " << endl;
+  if(triplet){
+
+    cout << "True" << endl;
+  }
+  else{
+
+    cout << "False" << endl;
+  }
+
+  End = clock();
+  elapsedTime = (End - Start)/CLOCKS_PER_MS; // converts elapsed time from microseconds to milliseconds.
+  cout << "isTripletClique Elapsed Time: " << elapsedTime << endl;
+
 
 
 }

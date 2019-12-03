@@ -67,10 +67,14 @@ public:
   bool IsThereTripletClique();
   double GetMinDistance(string city1,string city2);
   bool isGraphConnected();
+  int LongestSimplePath();
 
   //Helper Functions
   void DFS(Node *s);
   void Dijkstra();
+  void generateTestGraph();
+  string getRandString();
+
   
 private:
   map<string,Node*>* graph;

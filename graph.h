@@ -5,6 +5,7 @@
 #include <vector>
 #include <queue>
 #include <map>
+#include <list>
 using namespace std;
 
 class Edge;
@@ -70,7 +71,8 @@ public:
 
   //Helper Functions
   void DFS(Node *s);
-  void Dijkstra(Node*);
+  double Dijkstra(Node*,Node*);
+  pair<Node*,double>* findMin(list< pair<Node*,double>* >&);
 
 private:
   map<string,Node*>* graph;

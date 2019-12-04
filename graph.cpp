@@ -82,9 +82,9 @@ bool Graph::IsThereTripletClique(){
           cout << (*temp)->getNode()->getPayload();
         }
         cout << endl;
-        
-        
-        
+
+
+
         if(temp==adj->end()){
         }
         else{
@@ -93,22 +93,14 @@ bool Graph::IsThereTripletClique(){
           vector<Edge* >* adj2 = (*temp)->getNode()->adjacentsList();
           it2 = find(adj2->begin(), adj2->end(), (*it1));
         }
-        if(*it2 == *it1){ 
-          
+        if(*it2 == *it1){
+
           return true;
         }
       }
     }
   }
   return false;
-}
-
-//do this one last
-double Graph::GetMinDistance(string city1,string city2){
-
-  Dijkstra();
-
-  return 2.0;
 }
 
 
@@ -126,9 +118,9 @@ bool Graph::isGraphConnected(){
     cout << n->getPayload();
     if(!n->isVisited()){
       cout << " - not visited" << endl;
-        
+
     }
-   
+
   }
 
   //set source as first in map
@@ -183,16 +175,113 @@ void Graph::DFS(Node *s){
   }
 }
 
-//use in Getmindistance
-void Graph::Dijkstra(Node* startV){
+//do this one last
+double Graph::GetMinDistance(string city1,string city2){
+  Node* v1 = nullptr;
+  Node* v2 = nullptr;
   map<string,Node*>::iterator it;
-
   for(it = graph->begin(); it != graph->end();++it){
-    (*it)->setVisited(false);
+    if(it->first == city1){
+      v1 = it->second;
+    }
+    if(it->first == city2){
+      v2 = it->second;
+    }
+  }
+  return Dijkstra(v1,v2);
+}
+
+//use in Getmindistance
+double Graph::Dijkstra(Node* v1,Node* v2){
+  const int INF = 500000;
+  map<string,Node*>::iterator it;
+  vector< pair<Node*,double> > dist;
+  list< pair<Node*,double>* > unvisited;
+
+
+  int N = 0;
+  // Populate "dist" vector and set all Nodes in graph to unvisited
+  for(it = graph->begin(); it != graph->end(); ++it){
+    // pair<node,minDistance>
+    pair<Node*,double> vertice(it->second,INF);
+    dist.push_back(vertice);
+
+    it->second->setVisited(false);
+    // Starting vertice has distance 0 and is visited
+    if(it->second == v1){
+      dist.at(N).first->setVisited(true);
+      dist.at(N).second = 0;
+    }
+    ++N;
   }
 
+  // Populate "unvisited" list
+  pair<Node*,double>* data = dist.data();
+  for(unsigned i = 0; i < dist.size(); ++i){
+    unvisited.push_front(data);
+    ++data;
+  }
 
+  // Till unvisited is empty
+  while(!unvisited.empty()){
+    // Find smallest
+    pair<Node*,double>* curr = findMin(unvisited);
+    curr->first->setVisited(true);
+
+    list< pair<Node*,double>* >::iterator it1;
+    it1 = find(unvisited.begin(), unvisited.end(), curr);
+    if(it1 != unvisited.end()){
+      unvisited.erase(it1);
+    }
+
+    // For each curr's adj nodes
+    for(int i = 0; i < curr->first->degree(); ++i){
+      if(!(curr->first->adjacentsList()->at(i)->getNode()->isVisited())){
+        double edgeWeight = curr->first->adjacentsList()->at(i)->getWeight();
+        double pathWeight = curr->second + edgeWeight;
+
+        // Find current distance of "adjNode" (AKA "adjDistance")
+        Node* adjNode = curr->first->adjacentsList()->at(i)->getNode();
+        double adjDistance = INF;
+        bool found = false;
+        for(unsigned i = 0; i < dist.size() && !found; ++i){
+          if(dist.at(i).first == adjNode){
+            adjDistance = dist.at(i).second;
+            found = true;
+          }
+        }
+
+        // If pathWeight smaller than adjNode's current distance
+        if(pathWeight < adjDistance){
+          pair<Node*,double> adjVertice(adjNode,adjDistance);
+          vector< pair<Node*,double> >::iterator it1;
+          it1 = find(dist.begin(),dist.end(),adjVertice);
+          it1->second = pathWeight;
+        }
+
+      }
+    }
+  }
+  vector< pair<Node*,double> >::iterator it2;
+  for(it2 = dist.begin(); it2 != dist.end(); ++it2){
+    if(it2->first == v2){
+      return it2->second;
+    }
+  }
+  return INF;
 }
+
+pair<Node*,double>* Graph::findMin(list< pair<Node*,double>* >& List){
+  list< pair<Node*,double>* >::iterator it;
+  pair<Node*,double>* min = List.front();
+  for(it = List.begin(); it != List.end(); ++it){
+    if((*it)->second < min->second){
+      min = *it;
+    }
+  }
+  return min;
+}
+
 
 
 int main() {
@@ -232,6 +321,6 @@ int main() {
     cout << "False" << endl;
   }
   cout << endl;
-
+  cout << g.GetMinDistance("a","c");
 
 }
